@@ -3,6 +3,7 @@
 use App\Http\Controllers\LevelController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\kategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SalesController;
@@ -26,3 +27,9 @@ Route::get('/sales', [SalesController::class]);
 
 // Halaman Level
 Route::resource('/level', LevelController::class, ['only' => ['index']]);
+
+// Halaman Kategory
+Route::resource('/kategory', kategoryController::class, ['only' => ['index']]);
+
+// Halaman User
+Route::resource('/user', UserController::class, ['only' => ['index']]);
