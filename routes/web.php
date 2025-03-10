@@ -1,35 +1,13 @@
 <?php
 
-use App\Http\Controllers\LevelController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\kategoryController;
-use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\SalesController;
 
-// Halaman Home
-Route::get('/', [HomeController::class, 'index']);
-
-// Halaman Products dengan route prefix
-Route::prefix('category')->group(function () {
-    Route::get('/food-beverage', [ProductController::class, 'foodBeverage']);
-    Route::get('/beauty-health', [ProductController::class, 'beautyHealth']);
-    Route::get('/home-care', [ProductController::class, 'homeCare']);
-    Route::get('/baby-kid', [ProductController::class, 'babyKid']);
+Route::prefix('user')->group(function () {
+    Route::get('/', [UserController::class, 'index'])->name('user'); // Halaman User
+    Route::get('/tambah', [UserController::class, 'tambah'])->name('user_create'); // Halaman Tambah User
+    Route::post('/tambah', [UserController::class, 'tambah_simpan'])->name('user_save'); // Proses Tambah User
+    Route::get('/ubah/{id}', [UserController::class, 'ubah'])->name('user_ubah'); // Halaman edit User
+    Route::put('/ubah/{id}', [UserController::class, 'ubah_simpan'])->name('user_update'); // Proses ubah user
+    Route::get('/hapus/{id}', [UserController::class, 'hapus'])->name('user_delete'); // Proses hapus user
 });
-
-// Halaman User dengan route parameter
-Route::get('/user/{id}/name/{name}', [UserController::class, 'profile']);
-
-// Halaman Penjualan
-Route::get('/sales', [SalesController::class]);
-
-// Halaman Level
-Route::resource('/level', LevelController::class, ['only' => ['index']]);
-
-// Halaman Kategory
-Route::resource('/kategory', kategoryController::class, ['only' => ['index']]);
-
-// Halaman User
-Route::resource('/user', UserController::class, ['only' => ['index']]);
