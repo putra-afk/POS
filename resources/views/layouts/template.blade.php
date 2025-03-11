@@ -16,39 +16,37 @@
     <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.min.css') }}">
 </head>
 <body class="hold-transition sidebar-mini">
+    <!-- Site wrapper -->
+    <div class="wrapper">
+        @include('layouts.header') <!-- 1 -->
 
-<div class="wrapper">
-  <!-- Navbar -->
-  @include('layouts.header')
-  <!-- /.navbar -->
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <a href="{{ url('/') }}" class="brand-link">
+                <img src="{{ asset('dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo"
+                     class="brand-image img-circle elevation-3" style="opacity: .8">
+                <span class="brand-text font-weight-light">Starter Code</span>
+            </a>
 
-  <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <!-- Brand Logo -->
-    <a href="{{ url('/') }}" class="brand-link">
-        <img src="{{ asset('adminlte/dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img">
-        <span class="brand-text font-weight-light">PWL - Starter Code</span>
-    </a>
+            <div class="sidebar">
+                @include('layouts.sidebar') <!-- 2 -->
+            </div>
+        </aside>
 
-    <!-- Sidebar -->
-    @include('layouts.sidebar')
-    <!-- /.sidebar -->
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <div class="content-header">
+                @include('layouts.breadcrumb') <!-- 3 -->
+            </div>
 
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    @include('layouts.breadcrumb')
-
-    <!-- Main content -->
-    <section class="content">
-        @yield('content')
-    </section>
-    <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
-
-  @include('layouts.footer')
-</div>
+            <!-- Main content -->
+            <section class="content">
+                @yield('content') <!-- 4 -->
+            </section>
+        </div>
+        
+        @include('layouts.footer') <!-- 5 -->
+    </div>
 <!-- ./wrapper -->
 
 <!-- jQuery -->

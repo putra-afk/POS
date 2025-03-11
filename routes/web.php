@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WelcomeController;
 
 Route::prefix('user')->group(function () {
     Route::get('/', [UserController::class, 'index'])->name('user'); // Halaman User
@@ -11,3 +12,5 @@ Route::prefix('user')->group(function () {
     Route::put('/ubah/{id}', [UserController::class, 'ubah_simpan'])->name('user_update'); // Proses ubah user
     Route::get('/hapus/{id}', [UserController::class, 'hapus'])->name('user_delete'); // Proses hapus user
 });
+
+Route::get('/', [WelcomeController::class, 'index']);
