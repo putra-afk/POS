@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LevelController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
@@ -24,4 +25,15 @@ Route::prefix('user')->group(function () {
     Route::get('/{id}/edit', [UserController::class, 'edit'])->name('user.edit'); // menampilkan halaman form edit user
     Route::put('/{id}/edit', [UserController::class, 'update'])->name('user.update'); // menyimpan perubahan data user
     Route::delete('/{id}', [UserController::class, 'destroy'])->name('user.destroy'); // menghapus data user
+});
+
+Route::prefix('level')->group(function () {
+    Route::get('/', [LevelController::class, 'index'])->name('level.index'); // menampilkan halaman awal level
+    Route::post('/list', [LevelController::class, 'list'])->name('level.list'); // menampilkan data level dalam bentuk json untuk datatables
+    Route::get('/create', [LevelController::class, 'create'])->name('level.create'); // menampilkan halaman form tambah level
+    Route::post('/create', [LevelController::class, 'store'])->name('level.store'); // menyimpan data level baru
+    Route::get('/{id}', [LevelController::class, 'show'])->name('level.detail'); // menampilkan detail level
+    Route::get('/{id}/edit', [LevelController::class, 'edit'])->name('level.edit'); // menampilkan halaman form edit level
+    Route::put('/{id}/edit', [LevelController::class, 'update'])->name('level.update'); // menyimpan perubahan data level
+    Route::delete('/{id}', [LevelController::class, 'destroy'])->name('level.destroy'); // menghapus data level
 });
