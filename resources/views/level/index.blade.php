@@ -5,7 +5,7 @@
         <div class="card-header">
             <h3 class="card-title">{{ $page->title }}</h3>
             <div class="card-tools">
-                <a class="btn btn-sm btn-primary mt-1" href="{{ route('user.create') }}">Tambah</a>
+                <a class="btn btn-sm btn-primary mt-1" href="{{ route('level.create') }}">Tambah</a>
             </div>
         </div>
         <div class="card-body">
@@ -24,7 +24,7 @@
                         <div class="col-3">
                             <select class="form-control" id="level_id" name="level_id" required>
                                 <option value="">-- Semua --</option>
-                                @foreach($level as $item)
+                                @foreach($levels as $item)
                                     <option value="{{ $item->level_id }}">{{ $item->level_name }}</option>
                                 @endforeach
                             </select>
@@ -34,29 +34,29 @@
                 </div>
             </div>
 
-            <table class="table table-bordered table-striped table-hover table-sm" id='table_user'>
+            <table class="table table-bordered table-striped table-hover table-sm" id='table_level'>
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Username</th>
-                        <th>Nama</th>
-                        <th>Level Pengguna</th>
+                        <th>Name</th>
+                        <th>Code</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($users as $user)
+                    @foreach ($levels as $level)
                         <tr>
-                            <td>{{ $user->user_id }}</td>
-                            <td>{{ $user->username }}</td>
-                            <td>{{ $user->nama }}</td>
-                            <td>{{ $user->level->level_name }}</td>
+                            <td>{{ $level->level_id }}</td>
+                            <td>{{ $level->level_name }}</td>
+                            <td>{{ $level->level_code }}</td>
                             <td>
-                                <form action="{{ route('user.destroy', $user->user_id) }}" method="post">
+                                <form action="{{ route('level.destroy', $level->level_id) }}" method="post">
                                     @csrf
                                     @method('DELETE')
-                                    <a href="{{ route('user.detail', $user->user_id) }}" class="btn btn-sm btn-info">Detail</a>
-                                    <a href="{{ route('user.edit', $user->user_id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                    <a href="{{ route('level.detail', $level->level_id) }}"
+                                        class="btn btn-sm btn-info">Detail</a>
+                                    <a href="{{ route('level.edit', $level->level_id) }}"
+                                        class="btn btn-sm btn-warning">Edit</a>
                                     <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
                                 </form>
                             </td>
@@ -74,11 +74,11 @@
         <script>
             $(document).ready(function () {
                 console.log('test')
-                var dataUser = $('#table_user').DataTable({
+                var dataUser = $('#table_level').DataTable({
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        "url": "{{ route('user.list') }}",
+                        "url": "{{ route('level.list') }}",
                         "type": "POST",
                         "dataType": "json",
                         "data": function (d) {
@@ -90,9 +90,8 @@
                     },
                     columns: [
                         { data: "DT_RowIndex", className: "text-center", orderable: false, searchable: false },
-                        { data: "username", orderable: true, searchable: true },
-                        { data: "nama", orderable: true, searchable: true },
-                        { data: "level.level_name", orderable: false, searchable: false },
+                        { data: "level_name", orderable: true, searchable: true },
+                        { data: "level_code", orderable: true, searchable: true },
                         { data: "aksi", orderable: false, searchable: false }
                     ]
                 });

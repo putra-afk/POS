@@ -28,12 +28,12 @@ Route::prefix('user')->group(function () {
 });
 
 Route::prefix('level')->group(function () {
-    Route::get('/', [LevelController::class, 'index'])->name('level.index'); // menampilkan halaman awal level
-    Route::post('/list', [LevelController::class, 'list'])->name('level.list'); // menampilkan data level dalam bentuk json untuk datatables
-    Route::get('/create', [LevelController::class, 'create'])->name('level.create'); // menampilkan halaman form tambah level
-    Route::post('/create', [LevelController::class, 'store'])->name('level.store'); // menyimpan data level baru
-    Route::get('/{id}', [LevelController::class, 'show'])->name('level.detail'); // menampilkan detail level
-    Route::get('/{id}/edit', [LevelController::class, 'edit'])->name('level.edit'); // menampilkan halaman form edit level
-    Route::put('/{id}/edit', [LevelController::class, 'update'])->name('level.update'); // menyimpan perubahan data level
-    Route::delete('/{id}', [LevelController::class, 'destroy'])->name('level.destroy'); // menghapus data level
+    Route::get('/', [LevelController::class, 'index'])->name('level.index');
+    Route::post('/list', [LevelController::class, 'list'])->name('level.list'); // ✅ Ensure this route exists
+    Route::get('/create', [LevelController::class, 'create'])->name('level.create');
+    Route::post('/create', [LevelController::class, 'store'])->name('level.store');
+    Route::get('/{id}', [LevelController::class, 'show'])->name('level.detail');
+    Route::get('/{id}/edit', [LevelController::class, 'edit'])->name('level.edit');
+    Route::put('/{id}/edit', [LevelController::class, 'update'])->name('level.update');
+    Route::delete('/{id}', [LevelController::class, 'destroy'])->name('level.destroy');
 });

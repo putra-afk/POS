@@ -3,7 +3,7 @@
 @section('content')
     <div class="card card-outline card-primary">
         <div class="card-header">
-            <h3 class="card-title">Detail Level</h3>
+            <h3 class="card-title">{{ $page->title }}</h3>
             <div class="card-tools"></div>
         </div>
         <div class="card-body">
@@ -15,16 +15,16 @@
             @else
                 <table class="table table-bordered table-striped table-hover table-sm">
                     <tr>
-                        <th>ID Level</th>
+                        <th>ID</th>
                         <td>{{ $level->level_id }}</td>
                     </tr>
                     <tr>
-                        <th>Kode Level</th>
-                        <td>{{ $level->level_code }}</td>
+                        <th>Level Name</th>
+                        <td>{{ $level->level_name }}</td>
                     </tr>
                     <tr>
-                        <th>Nama Level</th>
-                        <td>{{ $level->level_name }}</td>
+                        <th>Level Code</th>
+                        <td>{{ $level->level_code }}</td>
                     </tr>
                 </table>
             @endempty
@@ -32,9 +32,3 @@
         </div>
     </div>
 @endsection
-
-@push('css')
-@endpush
-
-@push('js')
-@endpush

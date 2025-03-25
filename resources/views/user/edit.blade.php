@@ -17,12 +17,12 @@
             <form method="POST" action="{{ url('/user/'.$user->user_id) }}" class="form-horizontal">
                 @csrf
                 @method('PUT')<!-- Untuk method PUT pada update -->
-                
+
                 <div class="form-group row">
                     <label class="col-1 control-label col-form-label">Level</label>
                     <div class="col-11">
                         <select class="form-control" id="level_id" name="level_id" required>
-                            <option value="">- Pilih Level -</option>
+                            <option value="">--++ Pilih Level --</option>
                             @foreach($level as $item)
                                 <option value="{{ $item->level_id }}" @if($item->level_id == $user->level_id) selected @endif>{{ $item->level_name }}</option>
                             @endforeach
