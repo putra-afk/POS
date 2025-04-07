@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BarangController;
 use App\Http\Controllers\KategoryController;
 use App\Http\Controllers\LevelController;
 use Illuminate\Support\Facades\Route;
@@ -48,4 +49,14 @@ Route::prefix('kategory')->group(function () {
     Route::get('/{id}/edit', [KategoryController::class, 'edit'])->name('kategory.edit');
     Route::put('/{id}/edit', [KategoryController::class, 'update'])->name('kategory.update');
     Route::delete('/{id}', [KategoryController::class, 'destroy'])->name('kategory.destroy');
+});
+
+Route::prefix('barang')->group(function () {
+    Route::get('/', [BarangController::class, 'index'])->name('barang.index');
+    Route::get('/create', [BarangController::class, 'create'])->name('barang.create');
+    Route::post('/create', [BarangController::class, 'store'])->name('barang.store');
+    Route::get('/{id}', [BarangController::class, 'show'])->name('barang.show');
+    Route::get('/{id}/edit', [BarangController::class, 'edit'])->name('barang.edit');
+    Route::put('/{id}/edit', [BarangController::class, 'update'])->name('barang.update');
+    Route::delete('/{id}', [BarangController::class, 'destroy'])->name('barang.destroy');
 });
