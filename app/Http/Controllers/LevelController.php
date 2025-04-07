@@ -38,7 +38,7 @@ class LevelController extends Controller
         $query = LevelModel::select('level_id', 'level_name', 'level_code');
 
         return DataTables::of($query)
-            ->addIndexColumn() // ✅ Fix: Adds DT_RowIndex automatically
+            ->addIndexColumn()
             ->addColumn('aksi', function ($level) {
                 return '<a href="' . route('level.edit', $level->level_id) . '" class="btn btn-warning btn-sm">Edit</a>
                 <form action="' . route('level.destroy', $level->level_id) . '" method="POST" style="display:inline;">
@@ -113,6 +113,32 @@ class LevelController extends Controller
         ]);
     }
 
+    public function edit($level_id)
+    {
+        $level = LevelModel::find($level_id);
+
+        if (!$level) {
+            return redirect()->route('level.index')->with('error', 'Data level tidak ditemukan');
+        }
+
+        $breadcrumb = (object) [
+            "title" => "Edit Level",
+            "list" => ["Home", "Level", "Edit"]
+        ];
+
+        $page = (object) [
+            "title" => "Form Edit Level"
+        ];
+
+        $activeMenu = "level";
+
+        return view('level.edit', [
+            'breadcrumb' => $breadcrumb,
+            'page' => $page,
+            'activeMenu' => $activeMenu,
+            'level' => $level
+        ]);
+    }
 
     public function update(Request $request, string $level_id)
     {

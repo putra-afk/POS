@@ -17,12 +17,12 @@
                 <div class="alert alert-danger">{{ session('error') }}</div>
             @endif
 
-            <div class="row">
+            <div class="row mb-3">
                 <div class="col-md-12">
                     <div class="form-group row">
                         <label class="col-1 control-label col-form-label">Filter:</label>
                         <div class="col-3">
-                            <select class="form-control" id="level_id" name="level_id" required>
+                            <select class="form-control" id="level_id" name="level_id">
                                 <option value="">-- Semua --</option>
                                 @foreach($levels as $item)
                                     <option value="{{ $item->level_id }}">{{ $item->level_name }}</option>
@@ -38,66 +38,68 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Name</th>
-                        <th>Code</th>
+                        <th>Nama Level</th>
+                        <th>Kode</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($levels as $level)
-                        <tr>
-                            <td>{{ $level->level_id }}</td>
-                            <td>{{ $level->level_name }}</td>
-                            <td>{{ $level->level_code }}</td>
-                            <td>
-                                <form action="{{ route('level.destroy', $level->level_id) }}" method="post">
-                                    @csrf
-                                    @method('DELETE')
-                                    <a href="{{ route('level.detail', $level->level_id) }}"
-                                        class="btn btn-sm btn-info">Detail</a>
-                                    <a href="{{ route('level.edit', $level->level_id) }}"
-                                        class="btn btn-sm btn-warning">Edit</a>
-                                    <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
-                                </form>
-                            </td>
-                        </tr>
-                    @endforeach
+                    {{-- Kosong karena pakai server-side --}}
                 </tbody>
             </table>
         </div>
+    </div>
 @endsection
 
-    @push('css')
-    @endpush
-
-    @push('js')
-        <script>
-            $(document).ready(function () {
-                console.log('test')
-                var dataUser = $('#table_level').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ajax: {
-                        "url": "{{ route('level.list') }}",
-                        "type": "POST",
-                        "dataType": "json",
-                        "data": function (d) {
-                            d.level_id = $('#level_id').val();
-                        },
-                        "headers": {
-                            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
-                        }
+@push('js')
+    <script>
+        $(document).ready(function () {
+            var dataUser = $('#table_level').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "{{ route('level.list') }}",
+                    type: "POST",
+                    dataType: "json",
+                    data: function (d) {
+                        d.level_id = $('#level_id').val();
                     },
-                    columns: [
-                        { data: "DT_RowIndex", className: "text-center", orderable: false, searchable: false },
-                        { data: "level_name", orderable: true, searchable: true },
-                        { data: "level_code", orderable: true, searchable: true },
-                        { data: "aksi", orderable: false, searchable: false }
-                    ]
-                });
-                $('#level_id').on('change', function () {
-                    dataUser.ajax.reload();
-                });
+                    headers: {
+                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+                    }
+                },
+                columns: [
+                    { data: "DT_RowIndex", className: "text-center", orderable: false, searchable: false },
+                    { data: "level_name", orderable: true, searchable: true },
+                    { data: "level_code", orderable: true, searchable: true },
+                    {
+                        data: "level_id",
+                        orderable: false,
+                        searchable: false,
+                        render: function (id, type, row) {
+                            let detailUrl = "{{ route('level.detail', ':id') }}".replace(':id', id);
+                            let editUrl = "{{ route('level.edit', ':id') }}".replace(':id', id);
+                            let deleteUrl = "{{ route('level.destroy', ':id') }}".replace(':id', id);
+
+                            return `
+                                    <div class="d-inline-flex flex-wrap gap-1">
+                                        <a href="${detailUrl}" class="btn btn-sm btn-info">Detail</a>
+                                        <a href="${editUrl}" class="btn btn-sm btn-warning">Edit</a>
+                                        <form action="${deleteUrl}" method="POST" style="display:inline-block;" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
+                                        </form>
+                                    </div>
+                                `;
+                        }
+                    }
+                ]
             });
-        </script>
-    @endpush
+
+            $('#level_id').on('change', function () {
+                dataUser.ajax.reload();
+            });
+        });
+    </script>
+@endpush

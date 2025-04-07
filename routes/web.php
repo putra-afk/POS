@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\KategoryController;
 use App\Http\Controllers\LevelController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -36,4 +37,15 @@ Route::prefix('level')->group(function () {
     Route::get('/{id}/edit', [LevelController::class, 'edit'])->name('level.edit');
     Route::put('/{id}/edit', [LevelController::class, 'update'])->name('level.update');
     Route::delete('/{id}', [LevelController::class, 'destroy'])->name('level.destroy');
+});
+
+Route::prefix('kategory')->group(function () {
+    Route::get('/', [KategoryController::class, 'index'])->name('kategory.index');
+    Route::post('/list', [KategoryController::class, 'list'])->name('kategory.list');
+    Route::get('/create', [KategoryController::class, 'create'])->name('kategory.create');
+    Route::post('/create', [KategoryController::class, 'store'])->name('kategory.store');
+    Route::get('/{id}', [KategoryController::class, 'show'])->name('kategory.detail');
+    Route::get('/{id}/edit', [KategoryController::class, 'edit'])->name('kategory.edit');
+    Route::put('/{id}/edit', [KategoryController::class, 'update'])->name('kategory.update');
+    Route::delete('/{id}', [KategoryController::class, 'destroy'])->name('kategory.destroy');
 });
