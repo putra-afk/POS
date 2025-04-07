@@ -3,6 +3,7 @@
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\KategoryController;
 use App\Http\Controllers\LevelController;
+use App\Http\Controllers\StokController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
@@ -31,7 +32,7 @@ Route::prefix('user')->group(function () {
 
 Route::prefix('level')->group(function () {
     Route::get('/', [LevelController::class, 'index'])->name('level.index');
-    Route::post('/list', [LevelController::class, 'list'])->name('level.list'); // ✅ Ensure this route exists
+    Route::post('/list', [LevelController::class, 'list'])->name('level.list');
     Route::get('/create', [LevelController::class, 'create'])->name('level.create');
     Route::post('/create', [LevelController::class, 'store'])->name('level.store');
     Route::get('/{id}', [LevelController::class, 'show'])->name('level.detail');
@@ -59,4 +60,14 @@ Route::prefix('barang')->group(function () {
     Route::get('/{id}/edit', [BarangController::class, 'edit'])->name('barang.edit');
     Route::put('/{id}/edit', [BarangController::class, 'update'])->name('barang.update');
     Route::delete('/{id}', [BarangController::class, 'destroy'])->name('barang.destroy');
+});
+
+Route::prefix('stok')->group(function () {
+    Route::get('/', [StokController::class, 'index'])->name('stok.index');
+    Route::get('/create', [StokController::class, 'create'])->name('stok.create');
+    Route::post('/create', [StokController::class, 'store'])->name('stok.store');
+    Route::get('/{id}', [StokController::class, 'show'])->name('stok.show');
+    Route::get('/{id}/edit', [StokController::class, 'edit'])->name('stok.edit');
+    Route::put('/{id}/edit', [StokController::class, 'update'])->name('stok.update');
+    Route::delete('/{id}', [StokController::class, 'destroy'])->name('stok.destroy');
 });
