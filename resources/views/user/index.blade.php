@@ -59,7 +59,7 @@
                                     @method('DELETE')
                                     <a href="{{ route('user.detail', $user->user_id) }}"
                                         class="btn btn-sm btn-info">Detail</a>
-                                    <a href="{{ route('user.edit', $user->user_id) }}"
+                                    <a href="{{ route('user.edit_ajax', $user->user_id) }}"
                                         class="btn btn-sm btn-warning">Edit</a>
                                     <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
                                 </form>

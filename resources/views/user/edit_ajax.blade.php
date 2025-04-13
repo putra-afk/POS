@@ -2,14 +2,14 @@
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Error</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Error</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="alert alert-danger">
-                    <h5><i class="fa fa-ban"></i> Error!!</h5>
+                    <h5><i class="fa fa-ban icon"></i> Error!!</h5>
                     The data you are looking for is not found.
                 </div>
                 <a href="{{ url('/user') }}" class="btn btn-warning">Return</a>
@@ -23,20 +23,19 @@
         <div id="modal-master" class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Edit Data User</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Data User</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-
                     <div class="form-group">
                         <label>User Level</label>
                         <select name="level_id" id="level_id" class="form-control" required>
                             <option value="">- Select Level -</option>
-                            @foreach($level as $l)
+                            @foreach ($level as $l)
                                 <option value="{{ $l->level_id }}" {{ $l->level_id == $user->level_id ? 'selected' : '' }}>
-                                    {{ $l->level_nama }}
+                                    {{ $l->level_name }}
                                 </option>
                             @endforeach
                         </select>
@@ -45,15 +44,16 @@
 
                     <div class="form-group">
                         <label>Username</label>
-                        <input value="{{ $user->username }}" type="text" name="username" id="username" class="form-control"
-                            required>
+                        <input value="{{ $user->username }}" type="text" name="username" id="username"
+                            class="form-control" required>
                         <small id="error-username" class="error-text form-text text-danger"></small>
                     </div>
 
                     <div class="form-group">
                         <label>Name</label>
-                        <input value="{{ $user->name }}" type="text" name="name" id="name" class="form-control" required>
-                        <small id="error-name" class="error-text form-text text-danger"></small>
+                        <input value="{{ $user->nama }}" type="text" name="nama" id="nama" class="form-control"
+                            required>
+                        <small id="error-nama" class="error-text form-text text-danger"></small>
                     </div>
 
                     <div class="form-group">
@@ -62,7 +62,6 @@
                         <small class="form-text text-muted">Ignore if you don't want to change the password</small>
                         <small id="error-password" class="error-text form-text text-danger"></small>
                     </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-warning">Cancel</button>
@@ -73,20 +72,34 @@
     </form>
 
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             $("#form-edit").validate({
                 rules: {
-                    level_id: { required: true, number: true },
-                    username: { required: true, minlength: 3, maxlength: 20 },
-                    name: { required: true, minlength: 3, maxlength: 100 },
-                    password: { minlength: 6, maxlength: 20 }
+                    level_id: {
+                        required: true,
+                        number: true
+                    },
+                    username: {
+                        required: true,
+                        minlength: 3,
+                        maxlength: 20
+                    },
+                    nama: {
+                        required: true,
+                        minlength: 3,
+                        maxlength: 100
+                    },
+                    password: {
+                        minlength: 6,
+                        maxlength: 20
+                    }
                 },
-                submitHandler: function (form) {
+                submitHandler: function(form) {
                     $.ajax({
                         url: form.action,
                         type: form.method,
                         data: $(form).serialize(),
-                        success: function (response) {
+                        success: function(response) {
                             if (response.status) {
                                 $('#myModal').modal('hide');
                                 Swal.fire({
@@ -97,7 +110,7 @@
                                 dataUser.ajax.reload();
                             } else {
                                 $('.error-text').text('');
-                                $.each(response.msgField, function (prefix, val) {
+                                $.each(response.msgField, function(prefix, val) {
                                     $('#error-' + prefix).text(val[0]);
                                 });
                                 Swal.fire({
@@ -111,14 +124,14 @@
                     return false;
                 },
                 errorElement: 'span',
-                errorPlacement: function (error, element) {
+                errorPlacement: function(error, element) {
                     error.addClass('invalid-feedback');
                     element.closest('.form-group').append(error);
                 },
-                highlight: function (element) {
+                highlight: function(element) {
                     $(element).addClass('is-invalid');
                 },
-                unhighlight: function (element) {
+                unhighlight: function(element) {
                     $(element).removeClass('is-invalid');
                 }
             });

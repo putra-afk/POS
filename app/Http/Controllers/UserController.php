@@ -213,26 +213,22 @@ class UserController extends Controller
 
     public function list(Request $request)
     {
-        // Select user data with relation to level
-        $users = UserModel::select('user_id', 'username', 'nama', 'level_id')
-            ->with('level');
+        $users = UserModel::with('level')->select('user_id', 'username', 'nama', 'level_id');
 
-        // Filter by level_id if provided
+        // Filter user data by level_id if dipilih
         if ($request->level_id) {
             $users->where('level_id', $request->level_id);
         }
 
-        // Return data in DataTables format
         return DataTables::of($users)
-            ->addIndexColumn() // Adds DT_RowIndex column for numbering
-            ->addColumn('action', function ($user) {
-                // Add action buttons using modalAction()
-                $btn  = '<button onclick="modalAction(\'' . url('/user/' . $user->user_id . '/show_ajax') . '\')" class="btn btn-info btn-sm">Detail</button> ';
+            ->addIndexColumn() // kolom nomor otomatis (DT_RowIndex)
+            ->addColumn('aksi', function ($user) {
+                $btn = '<button onclick="modalAction(\'' . url('/user/' . $user->user_id . '/show_ajax') . '\')" class="btn btn-info btn-sm">Detail</button> ';
                 $btn .= '<button onclick="modalAction(\'' . url('/user/' . $user->user_id . '/edit_ajax') . '\')" class="btn btn-warning btn-sm">Edit</button> ';
-                $btn .= '<button onclick="modalAction(\'' . url('/user/' . $user->user_id . '/delete_ajax') . '\')" class="btn btn-danger btn-sm">Delete</button>';
+                $btn .= '<button onclick="modalAction(\'' . url('/user/' . $user->user_id . '/delete_ajax') . '\')" class="btn btn-danger btn-sm">Delete</button> ';
                 return $btn;
             })
-            ->rawColumns(['action']) // Tells DataTables that the 'action' column contains HTML
+            ->rawColumns(['aksi']) // supaya kolom aksi dianggap HTML, bukan text biasa
             ->make(true);
     }
 
@@ -312,7 +308,7 @@ class UserController extends Controller
     public function edit_ajax(string $id)
     {
         $user = UserModel::find($id);
-        $level = LevelModel::select('level_id', 'level_nama')->get();
+        $level = LevelModel::select('level_id', 'level_name')->get();
 
         return view('user.edit_ajax', [
             'user' => $user,
@@ -349,55 +345,55 @@ class UserController extends Controller
 
     public function update_ajax(Request $request, $id)
     {
-        // Cek apakah request berasal dari AJAX atau meminta JSON
+        // Check if the request is an AJAX or expecting JSON
         if ($request->ajax() || $request->wantsJson()) {
 
-            // Validasi input
+            // Validation rules
             $rules = [
                 'level_id' => 'required|integer',
                 'username' => 'required|max:20|unique:m_user,username,' . $id . ',user_id',
-                'name' => 'required|max:100',
-                'password' => 'nullable|min:6|max:20',
+                'name'     => 'required|max:100',
+                'password' => 'nullable|min:6|max:20'
             ];
 
+            // Run validation
             $validator = Validator::make($request->all(), $rules);
 
+            // If validation fails, return JSON response with errors
             if ($validator->fails()) {
                 return response()->json([
-                    'status' => false,
-                    'message' => 'Validation failed.',
-                    'msgField' => $validator->errors(), // Untuk ditampilkan di input field
+                    'status'   => false,
+                    'message'  => 'Validation failed.',
+                    'msgField' => $validator->errors() // returns error for each field
                 ]);
             }
 
+            // Find user by ID
             $user = UserModel::find($id);
 
             if ($user) {
-                // Jika password tidak diisi, hapus field password dari request
+                // If password is not filled, remove it from request to avoid updating it
                 if (!$request->filled('password')) {
                     $request->request->remove('password');
-                } else {
-                    // Jika password diisi, hash terlebih dahulu (opsional jika memang perlu hashing)
-                    $request->merge([
-                        'password' => bcrypt($request->password)
-                    ]);
                 }
 
+                // Update the user data
                 $user->update($request->all());
 
                 return response()->json([
-                    'status' => true,
+                    'status'  => true,
                     'message' => 'Data updated successfully'
                 ]);
             } else {
+                // If user not found
                 return response()->json([
-                    'status' => false,
+                    'status'  => false,
                     'message' => 'Data not found'
                 ]);
             }
         }
 
-        // Jika bukan AJAX, redirect ke halaman utama
+        // Fallback if not an AJAX request
         return redirect('/');
     }
 
