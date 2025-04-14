@@ -27,12 +27,13 @@ Route::prefix('user')->group(function () {
     Route::get('/ajax', [UserController::class, 'create_ajax'])->name('user.create_ajax'); // Menampilkan halaman form tambah user Ajax
     Route::post('/ajax', [UserController::class, 'store_ajax'])->name('user.store_ajax'); // Menyimpan data user baru Ajax
     Route::get('/{id}', [UserController::class, 'show'])->name('user.detail'); // menampilkan detail user
+    Route::get('/{id}/show_ajax', [UserController::class, 'show_detail_ajax'])->name('user.show_ajax'); // Menampilkan detail user via modal ajax
     Route::get('/{id}/edit', [UserController::class, 'edit'])->name('user.edit'); // menampilkan halaman form edit user
     Route::put('/{id}/edit', [UserController::class, 'update'])->name('user.update'); // menyimpan perubahan data user
     Route::get('/{id}/edit_ajax', [UserController::class, 'edit_ajax'])->name('user.edit_ajax'); // Menampilkan form edit user via modal ajax
     Route::put('/update_ajax', [UserController::class, 'update_ajax'])->name('user.update_ajax'); // Menyimpan perubahan data user ajax
-    Route::get('/{id}/delete_ajax', [UserController::class, 'delete_ajax'])->name('user.delete_ajax'); // Menampilkan form delete user via modal ajax
-    Route::delete('/delete_ajax', [UserController::class, 'delete_ajax'])->name('user.delete_ajax'); // Menghapus data user ajax
+    Route::get('/{id}/delete_ajax', [UserController::class, 'confirm_delete_ajax'])->name('user.confirm_ajax'); // Menampilkan konfirmasi hapus user via modal ajax
+    Route::delete('/{id}/delete_ajax', [UserController::class, 'delete_ajax'])->name('user.delete_ajax'); // Menghapus data user ajax
     Route::delete('/{id}', [UserController::class, 'destroy'])->name('user.destroy'); // menghapus data user
 });
 

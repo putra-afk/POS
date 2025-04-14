@@ -10,6 +10,7 @@ use App\Models\UserModel;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\LevelModel;
 
+
 class UserController extends Controller
 {
     public function profile($id, $name)
@@ -156,7 +157,7 @@ class UserController extends Controller
         return view('user.index', [
             'breadcrumb' => $breadcrumb,
             'page' => $page,
-            'level' => $level, // Pastikan dikirim ke view
+            'level' => $level,
             'activeMenu' => $activeMenu,
             'users' => $users
         ]);
@@ -302,6 +303,13 @@ class UserController extends Controller
             'user' => $user,
             'activeMenu' => $activeMenu
         ]);
+    }
+
+    public function show_detail_ajax($id)
+    {
+        $user = UserModel::with('level')->find($id);
+
+        return view('user.show_ajax', compact('user'));
     }
 
     // Menampilkan halaman form edit user ajax
@@ -459,6 +467,33 @@ class UserController extends Controller
         }
 
         return redirect('/user')->with('success', 'Data user berhasil disimpan');
+    }
+
+    public function confirm_delete_ajax($id)
+    {
+        $user = UserModel::find($id);
+        return view('user.confirm_ajax', compact('user'));
+    }
+
+    public function delete_ajax(Request $request, $id)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $user = UserModel::find($id);
+            if ($user) {
+                $user->delete();
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data berhasil dihapus'
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data tidak ditemukan'
+                ]);
+            }
+        }
+
+        return redirect('/');
     }
 
     // Menghapus data user
