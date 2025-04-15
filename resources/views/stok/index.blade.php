@@ -1,4 +1,3 @@
-@php $activeMenu = 'stok'; @endphp
 @extends('layouts.template')
 
 @section('content')
