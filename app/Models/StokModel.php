@@ -6,14 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class StokModel extends Model
 {
-    protected $table = 'm_stok';
+    protected $table = 't_stok';
     protected $primaryKey = 'stok_id';
     public $timestamps = false;
 
     protected $fillable = [
+        'stok_id',
         'barang_id',
-        'jumlah',
-        'keterangan',
+        'user_id',
+        'stok_tanggal',
+        'stok_jumlah',
+        'craeted_at',
+        'updated_at'
     ];
 
     public function barang()

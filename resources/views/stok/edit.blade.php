@@ -7,12 +7,15 @@
         </div>
         <div class="card-body">
             <form method="POST" action="{{ route('stok.update', $stok->stok_id) }}">
-                @csrf @method('PUT')
+                @csrf
+                @method('PUT')
+
                 <div class="form-group">
                     <label>Barang</label>
                     <select name="barang_id" class="form-control" required>
-                        @foreach($barang as $item)
-                            <option value="{{ $item->barang_id }}" {{ $stok->barang_id == $item->barang_id ? 'selected' : '' }}>
+                        @foreach ($barang as $item)
+                            <option value="{{ $item->barang_id }}"
+                                {{ $stok->barang_id == $item->barang_id ? 'selected' : '' }}>
                                 {{ $item->barang_nama }}
                             </option>
                         @endforeach
@@ -21,7 +24,7 @@
 
                 <div class="form-group">
                     <label>Jumlah</label>
-                    <input type="number" name="jumlah" class="form-control" value="{{ $stok->jumlah }}" required>
+                    <input type="number" name="stok_jumlah" class="form-control" value="{{ $stok->stok_jumlah }}" required>
                 </div>
 
                 <div class="form-group">

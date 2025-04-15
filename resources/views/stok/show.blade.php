@@ -13,15 +13,15 @@
                 </tr>
                 <tr>
                     <th>Jumlah</th>
-                    <td>{{ $stok->jumlah }}</td>
+                    <td>{{ $stok->stok_jumlah }}</td>
                 </tr>
                 <tr>
                     <th>Keterangan</th>
-                    <td>{{ $stok->keterangan }}</td>
+                    <td>{{ $stok->keterangan ?? '-' }}</td>
                 </tr>
                 <tr>
                     <th>Created At</th>
-                    <td>{{ $stok->created_at }}</td>
+                    <td>{{ $stok->created_at ?? '-' }}</td>
                 </tr>
             </table>
             <a href="{{ route('stok.index') }}" class="btn btn-secondary">Kembali</a>

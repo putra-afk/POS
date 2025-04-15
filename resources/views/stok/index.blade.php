@@ -1,40 +1,50 @@
 @extends('layouts.template')
 
 @section('content')
-    <div class="card">
+    <div class="card card-outline card-primary">
         <div class="card-header">
-            <h3>{{ $page->title }}</h3>
-            <a href="{{ route('stok.create') }}" class="btn btn-primary btn-sm float-right">Tambah</a>
+            <h3 class="card-title">{{ $page->title }}</h3>
+            <div class="card-tools">
+                <a href="{{ route('stok.create') }}" class="btn btn-sm btn-primary mt-1">Tambah</a>
+            </div>
         </div>
+
         <div class="card-body">
-            @if(session('success'))
+            @if (session('success'))
                 <div class="alert alert-success">{{ session('success') }}</div>
             @endif
 
-            <table class="table table-bordered">
+            @if (session('error'))
+                <div class="alert alert-danger">{{ session('error') }}</div>
+            @endif
+
+            <table class="table table-bordered table-striped table-hover table-sm" id="table_stok">
                 <thead>
                     <tr>
-                        <th>Barang</th>
-                        <th>Jumlah</th>
-                        <th>Keterangan</th>
+                        <th>No</th>
+                        <th>Nama Barang</th>
+                        <th>Jumlah Stok</th>
+                        <th>Tanggal Stok</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($stok as $item)
+                    @foreach ($stok as $index => $item)
                         <tr>
+                            <td class="text-center">{{ $index + 1 }}</td>
                             <td>{{ $item->barang->barang_nama ?? '-' }}</td>
-                            <td>{{ $item->jumlah }}</td>
-                            <td>{{ $item->keterangan ?? '-' }}</td>
+                            <td>{{ $item->stok_jumlah }}</td>
+                            <td>{{ $item->stok_tanggal }}</td>
                             <td>
-                                <a href="{{ route('stok.show', $item->stok_id) }}" class="btn btn-info btn-sm">Detail</a>
-                                <a href="{{ route('stok.edit', $item->stok_id) }}" class="btn btn-warning btn-sm">Edit</a>
-                                <form action="{{ route('stok.destroy', $item->stok_id) }}" method="POST"
-                                    style="display:inline;">
+                                <form action="{{ route('stok.destroy', $item->stok_id) }}" method="post">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-danger btn-sm"
-                                        onclick="return confirm('Hapus stok ini?')">Hapus</button>
+                                    <a href="{{ route('stok.show', $item->stok_id) }}"
+                                        class="btn btn-sm btn-info">Detail</a>
+                                    <a href="{{ route('stok.edit', $item->stok_id) }}"
+                                        class="btn btn-sm btn-warning">Edit</a>
+                                    <button type="submit" class="btn btn-sm btn-danger"
+                                        onclick="return confirm('Yakin ingin menghapus?')">Hapus</button>
                                 </form>
                             </td>
                         </tr>
@@ -44,3 +54,11 @@
         </div>
     </div>
 @endsection
+
+@push('js')
+    <script>
+        $(document).ready(function() {
+            $('#table_stok').DataTable();
+        });
+    </script>
+@endpush

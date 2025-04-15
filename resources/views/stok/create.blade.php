@@ -12,7 +12,7 @@
                     <label>Barang</label>
                     <select name="barang_id" class="form-control" required>
                         <option value="">-- Pilih Barang --</option>
-                        @foreach($barang as $item)
+                        @foreach ($barang as $item)
                             <option value="{{ $item->barang_id }}">{{ $item->barang_nama }}</option>
                         @endforeach
                     </select>
@@ -20,7 +20,7 @@
 
                 <div class="form-group">
                     <label>Jumlah</label>
-                    <input type="number" name="jumlah" class="form-control" required>
+                    <input type="number" name="stok_jumlah" class="form-control" required>
                 </div>
 
                 <div class="form-group">
