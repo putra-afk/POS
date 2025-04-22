@@ -6,6 +6,8 @@
             <h3 class="card-title">{{ $page->title }}</h3>
             <div class="card-tools">
                 <a class="btn btn-sm btn-primary mt-1" href="{{ route('level.create') }}">Tambah</a>
+                <button onclick="modalAction('{{ route('level.create_ajax') }}')" class="btn btn-sm btn-success mt-1">Add
+                    Ajax</button>
             </div>
         </div>
         <div class="card-body">
@@ -34,7 +36,7 @@
                 </div>
             </div>
 
-            <table class="table table-bordered table-striped table-hover table-sm" id='table_level'>
+            <table class="table table-bordered table-striped table-hover table-sm" id="table_level">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -57,7 +59,7 @@
                                     @method('DELETE')
                                     <a href="{{ route('level.detail', $level->level_id) }}"
                                         class="btn btn-sm btn-info">Detail</a>
-                                    <a href="{{ route('level.edit', $level->level_id) }}"
+                                    <a href="{{ route('level.edit_ajax', $level->level_id) }}"
                                         class="btn btn-sm btn-warning">Edit</a>
                                     <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
                                 </form>
@@ -72,13 +74,46 @@
 
 @push('js')
     <script>
-        // Jika tidak pakai server-side, datatables bisa jalan tanpa ajax
-        $(document).ready(function() {
-            $('#table_level').DataTable();
+        < script >
+            function modalAction(url = '') {
+                $('#myModal').load(url, function() {
+                    $('#myModal').modal('show');
+                });
+            }
 
-            $('#level_id').on('change', function() {
-                // Jika perlu reload manual
-                $('#table_level').DataTable().search(this.value).draw();
+        var dataLevel;
+        $(document).ready(function() {
+            dataLevel = $('#table_level').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "{{ route('level.list') }}",
+                    type: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        className: 'text-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'level'
+                    },
+                    {
+                        data: 'level_name'
+                    },
+                    {
+                        data: 'level_code'
+                    },
+                    {
+                        data: 'aksi',
+                        orderable: false,
+                        searchable: false
+                    }
+                ]
             });
         });
     </script>
