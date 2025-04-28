@@ -52,9 +52,7 @@
                             <td>{{ $level->level_name }}</td>
                             <td>{{ $level->level_code }}</td>
                             <td>
-                                <form action="{{ route('level.destroy', $level->level_id) }}" method="POST"
-                                    style="display:inline-block;"
-                                    onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                <form action="{{ route('level.destroy', $level->level_id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <a href="{{ route('level.detail', $level->level_id) }}"
@@ -70,16 +68,18 @@
             </table>
         </div>
     </div>
+
+    <div id="myModal" class="modal fade animate shake" tabindex="-1" role="dialog" data-backdrop="static"
+        data-keyboard="false" data-width="75%" aria-hidden="true"></div>
 @endsection
 
 @push('js')
     <script>
-        < script >
-            function modalAction(url = '') {
-                $('#myModal').load(url, function() {
-                    $('#myModal').modal('show');
-                });
-            }
+        function modalAction(url = '') {
+            $('#myModal').load(url, function() {
+                $('#myModal').modal('show');
+            });
+        }
 
         var dataLevel;
         $(document).ready(function() {
@@ -94,13 +94,9 @@
                     }
                 },
                 columns: [{
-                        data: 'DT_RowIndex',
-                        className: 'text-center',
+                        data: 'level_id',
                         orderable: false,
                         searchable: false
-                    },
-                    {
-                        data: 'level'
                     },
                     {
                         data: 'level_name'
@@ -114,6 +110,9 @@
                         searchable: false
                     }
                 ]
+            });
+            $('#level_id').on('change', function() {
+                dataLevel.ajax.reload();
             });
         });
     </script>

@@ -37,7 +37,7 @@
             rules: {
                 level: {
                     required: true,
-                    minlength: 2,
+                    minlength: 1,
                     maxlength: 50
                 },
                 level_name: {

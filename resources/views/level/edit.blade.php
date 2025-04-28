@@ -11,7 +11,7 @@
                     <h5><i class="icon fas fa-ban"></i> Kesalahan!</h5>
                     Data level tidak ditemukan.
                 </div>
-                <a href="{{ url('level') }}" class="btn btn-sm btn-default mt-2">Kembali</a>
+                <a href="{{ route('level') }}" class="btn btn-sm btn-default mt-2">Kembali</a>
             @else
                 <form method="POST" action="{{ route('level.update', $level->level_id) }}" class="form-horizontal">
                     @csrf

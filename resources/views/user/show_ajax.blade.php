@@ -33,7 +33,18 @@
                         </tr>
                         <tr>
                             <th>Password</th>
-                            <td>********</td>
+                            <td>
+                                <div class="input-group">
+                                    <input type="password" id="password-field" class="form-control form-control-sm"
+                                        value="password" readonly>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary btn-sm" type="button"
+                                            id="toggle-password">
+                                            <i class="fa fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </td>
                         </tr>
                     </table>
                 @endempty
@@ -50,5 +61,19 @@
 
     $('#modal-user-detail').on('hidden.bs.modal', function() {
         $(this).remove(); // hapus elemen modal dari DOM setelah ditutup
+    });
+
+    $('#toggle-password').on('click', function() {
+        let passwordField = $('#password-field');
+        let passwordFieldType = passwordField.attr('type');
+        let icon = $(this).find('i');
+
+        if (passwordFieldType === 'password') {
+            passwordField.attr('type', 'text');
+            icon.removeClass('fa-eye').addClass('fa-eye-slash');
+        } else {
+            passwordField.attr('type', 'password');
+            icon.removeClass('fa-eye-slash').addClass('fa-eye');
+        }
     });
 </script>

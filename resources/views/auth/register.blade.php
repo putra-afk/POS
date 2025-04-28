@@ -4,17 +4,13 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>User Login</title>
+    <title>User Register</title>
 
-    <!-- Google Font: Source Sans Pro -->
+    <!-- Styles -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=swap">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/fontawesome-free/css/all.min.css') }}">
-    <!-- icheck bootstrap -->
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
-    <!-- SweetAlert2 -->
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
-    <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.min.css') }}">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -24,19 +20,19 @@
     <div class="login-box">
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
-                <a href="/" class="h1"><b>Admin</b>LTE</a>
+                <a href="/" class="h1"><b>User</b>Register</a>
             </div>
             <div class="card-body">
-                <p class="login-box-msg">Sign in to start your session</p>
+                <p class="login-box-msg">Create a new account</p>
 
-                <form action="{{ route('auth.login') }}" method="POST" id="form-login">
+                <form action="{{ route('auth.register') }}" method="POST" id="form-register">
                     @csrf
                     <div class="input-group mb-3">
                         <input type="text" id="username" name="username" class="form-control"
                             placeholder="Username">
                         <div class="input-group-append">
                             <div class="input-group-text">
-                                <span class="fas fa-envelope"></span>
+                                <span class="fas fa-user"></span>
                             </div>
                         </div>
                     </div>
@@ -53,21 +49,26 @@
                     </div>
                     <small id="error-password" class="error-text text-danger"></small>
 
-                    <div class="row">
-                        <div class="col-8">
-                            <div class="icheck-primary">
-                                <input type="checkbox" id="remember" name="remember">
-                                <label for="remember">Remember Me</label>
+                    <div class="input-group mb-3">
+                        <input type="password" id="confirm_password" name="confirm_password" class="form-control"
+                            placeholder="Confirm Password">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
                             </div>
                         </div>
+                    </div>
+                    <small id="error-confirm_password" class="error-text text-danger"></small>
+
+                    <div class="row">
+                        <div class="col-8">
+                            <a href="{{ route('auth.login') }}">Already have an account?</a>
+                        </div>
                         <div class="col-4">
-                            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                            <button type="submit" class="btn btn-primary btn-block">Register</button>
                         </div>
                     </div>
                 </form>
-                <div class="text-center mt-2">
-                    <a href="{{ route('auth.register') }}">Don't have an account? Register</a>
-                </div>
             </div>
         </div>
     </div>
@@ -88,7 +89,7 @@
         });
 
         $(document).ready(function() {
-            $("#form-login").validate({
+            $("#form-register").validate({
                 rules: {
                     username: {
                         required: true,
@@ -99,6 +100,9 @@
                         required: true,
                         minlength: 6,
                         maxlength: 20
+                    },
+                    confirm_password: {
+                        equalTo: "#password"
                     }
                 },
                 submitHandler: function(form) {
@@ -110,7 +114,7 @@
                             if (response.status) {
                                 Swal.fire({
                                     icon: 'success',
-                                    title: 'Succeed',
+                                    title: 'Success',
                                     text: response.message,
                                 }).then(function() {
                                     window.location = response.redirect;
@@ -124,7 +128,7 @@
                                 }
                                 Swal.fire({
                                     icon: 'error',
-                                    title: 'Something Went Wrong',
+                                    title: 'Error',
                                     text: response.message
                                 });
                             }

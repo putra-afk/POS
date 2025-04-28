@@ -74,9 +74,6 @@
             data-keyboard="false" data-width="75%" aria-hidden="true"></div>
     @endsection
 
-    @push('css')
-    @endpush
-
     @push('js')
         <script>
             function modalAction(url = '') {

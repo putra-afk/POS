@@ -1,4 +1,4 @@
-@empty($level)
+@if (empty($level))
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -9,48 +9,47 @@
             </div>
             <div class="modal-body">
                 <div class="alert alert-danger">
-                    <h5><i class="fa fa-ban icon"></i> Error!!</h5>
-                    The data you are looking for is not found.
+                    <h5><i class="fa fa-ban"></i> Error!!</h5>
+                    Data level tidak ditemukan.
                 </div>
-                <a href="{{ route('level.index') }}" class="btn btn-warning">Return</a>
+                <a href="{{ route('level') }}" class="btn btn-warning">Kembali</a>
             </div>
         </div>
     </div>
 @else
-    <form method="POST" action="{{ route('level.update_ajax', $level->level_id) }}" id="form-edit">
+    <form action="{{ route('level.delete_ajax', $level->level_id) }}" method="POST" id="form-delete">
         @csrf
-        @method('PUT')
-
-        <input type="hidden" name="level_id" value="{{ $level->level_id }}">
-
+        @method('DELETE')
         <div id="modal-master" class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Edit Data Level</h5>
+                    <h5 class="modal-title">Delete Level</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
 
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label>Nama Level</label>
-                        <input type="text" class="form-control" id="level_name" name="level_name"
-                            value="{{ old('level_name', $level->level_name) }}" required>
-                        <small id="error-level_name" class="error-text form-text text-danger"></small>
+                    <div class="alert alert-warning">
+                        <h5><i class="fas fa-exclamation-triangle"></i> Konfirmasi!</h5>
+                        Apakah Anda yakin ingin menghapus data berikut?
                     </div>
 
-                    <div class="form-group">
-                        <label>Kode Level</label>
-                        <input type="text" class="form-control" id="level_code" name="level_code"
-                            value="{{ old('level_code', $level->level_code) }}" required>
-                        <small id="error-level_code" class="error-text form-text text-danger"></small>
-                    </div>
+                    <table class="table table-sm table-bordered table-striped">
+                        <tr>
+                            <th class="text-right col-3">Level Name:</th>
+                            <td class="col-9">{{ $level->level_name }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right col-3">Level Code:</th>
+                            <td class="col-9">{{ $level->level_code }}</td>
+                        </tr>
+                    </table>
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-warning" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-danger">Ya, Hapus</button>
                 </div>
             </div>
         </div>
@@ -58,40 +57,25 @@
 
     <script>
         $(document).ready(function() {
-            $("#form-edit").validate({
-                rules: {
-                    level_name: {
-                        required: true,
-                        minlength: 3,
-                        maxlength: 100
-                    },
-                    level_code: {
-                        required: true,
-                        maxlength: 20
-                    }
-                },
+            $("#form-delete").validate({
                 submitHandler: function(form) {
                     $.ajax({
                         url: form.action,
                         type: form.method,
                         data: $(form).serialize(),
                         success: function(response) {
+                            $('#myModal').modal('hide');
                             if (response.status) {
-                                $('#myModal').modal('hide');
                                 Swal.fire({
                                     icon: 'success',
-                                    title: 'Success',
+                                    title: 'Berhasil',
                                     text: response.message
                                 });
-                                dataLevel.ajax.reload(); // This reloads the DataTable
+                                dataLevel.ajax.reload(); // <- Ganti ke dataLevel
                             } else {
-                                $('.error-text').text('');
-                                $.each(response.msgField, function(prefix, val) {
-                                    $('#error-' + prefix).text(val[0]);
-                                });
                                 Swal.fire({
                                     icon: 'error',
-                                    title: 'Something Went Wrong',
+                                    title: 'Gagal',
                                     text: response.message
                                 });
                             }
@@ -99,8 +83,8 @@
                         error: function(xhr) {
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Error',
-                                text: 'Something went wrong, please try again.'
+                                title: 'Server Error',
+                                text: 'Terjadi kesalahan di server.'
                             });
                         }
                     });
@@ -120,4 +104,4 @@
             });
         });
     </script>
-@endempty
+@endif
