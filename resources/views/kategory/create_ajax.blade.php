@@ -1,31 +1,26 @@
-<form action="{{ route('level.store_ajax') }}" method="POST" id="form-add">
+<form action="{{ route('kategory.store_ajax') }}" method="POST" id="form-add">
     @csrf
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add Level</h5>
+                <h5 class="modal-title">Tambah Kategori</h5>
                 <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Level</label>
-                    <input type="text" name="level" id="level" class="form-control" required>
-                    <small id="error-level" class="error-text form-text text-danger"></small>
+                    <label>Kode Kategori</label>
+                    <input type="text" name="kategory_code" id="kategory_code" class="form-control" required>
+                    <small id="error-kategory_code" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
-                    <label>Level Name</label>
-                    <input type="text" name="level_name" id="level_name" class="form-control" required>
-                    <small id="error-level_name" class="error-text form-text text-danger"></small>
-                </div>
-                <div class="form-group">
-                    <label>Level Code</label>
-                    <input type="text" name="level_code" id="level_code" class="form-control" required>
-                    <small id="error-level_code" class="error-text form-text text-danger"></small>
+                    <label>Nama Kategori</label>
+                    <input type="text" name="kategory_name" id="kategory_name" class="form-control" required>
+                    <small id="error-kategory_name" class="error-text form-text text-danger"></small>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-warning">Cancel</button>
-                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
+                <button type="submit" class="btn btn-primary">Simpan</button>
             </div>
         </div>
     </div>
@@ -35,20 +30,15 @@
     $(document).ready(function() {
         $("#form-add").validate({
             rules: {
-                level: {
+                kategory_code: {
                     required: true,
-                    minlength: 1,
-                    maxlength: 50
+                    minlength: 2,
+                    maxlength: 10
                 },
-                level_name: {
+                kategory_name: {
                     required: true,
                     minlength: 2,
                     maxlength: 100
-                },
-                level_code: {
-                    required: true,
-                    minlength: 2,
-                    maxlength: 50
                 }
             },
             submitHandler: function(form) {
@@ -64,7 +54,7 @@
                                 title: 'Berhasil',
                                 text: response.message
                             });
-                            dataLevel.ajax
+                            dataKategory.ajax
                                 .reload();
                         } else {
                             $('.error-text').text('');
@@ -77,6 +67,13 @@
                                 text: response.message
                             });
                         }
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal',
+                            text: 'Terjadi kesalahan saat mengirim data.'
+                        });
                     }
                 });
                 return false;

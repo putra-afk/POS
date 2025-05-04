@@ -77,10 +77,17 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/', [KategoryController::class, 'index'])->name('kategory.index');
             Route::post('/list', [KategoryController::class, 'list'])->name('kategory.list');
             Route::get('/create', [KategoryController::class, 'create'])->name('kategory.create');
+            Route::get('/ajax', [KategoryController::class, 'create_ajax'])->name('kategory.create_ajax');
+            Route::post('/ajax', [KategoryController::class, 'store_ajax'])->name('kategory.store_ajax');
             Route::post('/create', [KategoryController::class, 'store'])->name('kategory.store');
             Route::get('/{id}', [KategoryController::class, 'show'])->name('kategory.detail');
+            Route::get('/{id}/show_ajax', [KategoryController::class, 'show_detail_ajax'])->name('kategory.show_ajax');
             Route::get('/{id}/edit', [KategoryController::class, 'edit'])->name('kategory.edit');
+            Route::get('/{id}/edit_ajax', [KategoryController::class, 'edit_ajax'])->name('kategory.edit_ajax');
+            Route::put('/{id}/update_ajax', [KategoryController::class, 'update_ajax'])->name('kategory.update_ajax');
             Route::put('/{id}/edit', [KategoryController::class, 'update'])->name('kategory.update');
+            Route::get('/{id}/delete_ajax', [KategoryController::class, 'confirm_delete_ajax'])->name('kategory.confirm_ajax');
+            Route::delete('/{id}/delete_ajax', [KategoryController::class, 'delete_ajax'])->name('kategory.delete_ajax');
             Route::delete('/{id}', [KategoryController::class, 'destroy'])->name('kategory.destroy');
         });
 

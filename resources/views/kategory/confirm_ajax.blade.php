@@ -1,4 +1,4 @@
-@if (empty($level))
+@if (empty($kategory))
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -10,20 +10,20 @@
             <div class="modal-body">
                 <div class="alert alert-danger">
                     <h5><i class="fa fa-ban"></i> Error!!</h5>
-                    Data level tidak ditemukan.
+                    Data kategori tidak ditemukan.
                 </div>
-                <a href="{{ route('level') }}" class="btn btn-warning">Kembali</a>
+                <a href="{{ route('kategory') }}" class="btn btn-warning">Kembali</a>
             </div>
         </div>
     </div>
 @else
-    <form action="{{ route('level.delete_ajax', $level->level_id) }}" method="POST" id="form-delete">
+    <form action="{{ route('kategory.delete_ajax', $kategory->kategory_id) }}" method="POST" id="form-delete">
         @csrf
         @method('DELETE')
         <div id="modal-master" class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Delete Level</h5>
+                    <h5 class="modal-title">Delete Kategory</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -37,12 +37,12 @@
 
                     <table class="table table-sm table-bordered table-striped">
                         <tr>
-                            <th class="text-right col-3">Level Name:</th>
-                            <td class="col-9">{{ $level->level_name }}</td>
+                            <th class="text-right col-3">Nama Kategori:</th>
+                            <td class="col-9">{{ $kategory->kategory_name }}</td>
                         </tr>
                         <tr>
-                            <th class="text-right col-3">Level Code:</th>
-                            <td class="col-9">{{ $level->level_code }}</td>
+                            <th class="text-right col-3">Kode Kategori:</th>
+                            <td class="col-9">{{ $kategory->kategory_code }}</td>
                         </tr>
                     </table>
                 </div>
@@ -71,7 +71,7 @@
                                     title: 'Berhasil',
                                     text: response.message
                                 });
-                                dataLevel.ajax.reload();
+                                dataKategory.ajax.reload();
                             } else {
                                 Swal.fire({
                                     icon: 'error',

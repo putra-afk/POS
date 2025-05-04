@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\KategoryModel;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+
 
 class KategoryController extends Controller
 {
@@ -40,11 +42,11 @@ class KategoryController extends Controller
         return DataTables::of($query)
             ->addIndexColumn()
             ->addColumn('aksi', function ($kategory) {
-                return '<a href="' . route('kategory.edit', $kategory->kategory_id) . '" class="btn btn-warning btn-sm">Edit</a>
-                <form action="' . route('kategory.destroy', $kategory->kategory_id) . '" method="POST" style="display:inline;">
-                    ' . csrf_field() . method_field('DELETE') . '
-                    <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
-                </form>';
+                $btn  = '<button onclick="modalAction(\'' . url('/kategory/' . $kategory->kategory_id . '/show_ajax') . '\')" class="btn btn-info btn-sm">Detail</button> ';
+                $btn .= '<button onclick="modalAction(\'' . url('/kategory/' . $kategory->kategory_id . '/edit_ajax') . '\')" class="btn btn-warning btn-sm">Edit</button> ';
+                $btn .= '<button onclick="modalAction(\'' . url('/kategory/' . $kategory->kategory_id . '/delete_ajax') . '\')" class="btn btn-danger btn-sm">Delete</button>';
+
+                return $btn;
             })
             ->rawColumns(['aksi'])
             ->make(true);
@@ -85,6 +87,43 @@ class KategoryController extends Controller
         return redirect()->route('kategory.index')->with('success', 'Kategori berhasil ditambahkan!');
     }
 
+    public function create_ajax()
+    {
+        return view('kategory.create_ajax');
+    }
+
+    public function store_ajax(Request $request)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+                'kategory_name' => 'required|string|max:100',
+                'kategory_code' => 'required|string|max:10|unique:m_kategory,kategory_code',
+            ];
+
+            $validator = Validator::make($request->all(), $rules);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi gagal',
+                    'msgField' => $validator->errors()
+                ]);
+            }
+
+            KategoryModel::create([
+                'kategory_name' => $request->kategory_name,
+                'kategory_code' => $request->kategory_code
+            ]);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Data kategori berhasil disimpan'
+            ]);
+        }
+
+        return redirect()->route('kategory.index');
+    }
+
     public function show($kategory_id)
     {
         $kategory = KategoryModel::find($kategory_id);
@@ -111,6 +150,61 @@ class KategoryController extends Controller
             'activeMenu' => $activeMenu
         ]);
     }
+
+    public function show_detail_ajax($id)
+    {
+        $kategory = KategoryModel::find($id);
+
+        if (!$kategory) {
+            // Tetap kembalikan view untuk konsistensi modal meskipun data tidak ditemukan
+            return response()->view('kategory.show_ajax', ['kategory' => null]);
+        }
+
+        return response()->view('kategory.show_ajax', compact('kategory'));
+    }
+
+    public function edit_ajax($kategory_id)
+    {
+        $kategory = KategoryModel::find($kategory_id);
+
+        return view('kategory.edit_ajax', compact('kategory'));
+    }
+
+    public function update_ajax(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'kategory_code' => 'required|max:20',
+            'kategory_name' => 'required|max:100',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validasi gagal!',
+                'msgField' => $validator->errors()
+            ]);
+        }
+
+        $kategory = KategoryModel::find($request->kategory_id);
+
+        if (!$kategory) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Data kategori tidak ditemukan.'
+            ]);
+        }
+
+        $kategory->update([
+            'kategory_code' => $request->kategory_code,
+            'kategory_name' => $request->kategory_name
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Data kategori berhasil diupdate.'
+        ]);
+    }
+
 
     public function edit($id)
     {
@@ -161,19 +255,46 @@ class KategoryController extends Controller
         return redirect('/kategory')->with('success', 'Data kategori berhasil diubah');
     }
 
-    public function destroy(string $kategory_id)
+    public function confirm_delete_ajax($id)
     {
-        $kategory = KategoryModel::find($kategory_id);
+        $kategory = KategoryModel::find($id);
+        return view('kategory.confirm_ajax', compact('kategory'));
+    }
 
-        if (!$kategory) {
-            return redirect('/kategory')->with('error', 'Data kategori tidak ditemukan');
+    public function delete_ajax(Request $request, $id)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $kategory = KategoryModel::find($id);
+            if ($kategory) {
+                $kategory->delete();
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data kategori berhasil dihapus'
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data kategori tidak ditemukan'
+                ]);
+            }
+        }
+
+        return redirect('/');
+    }
+
+    public function destroy(string $id)
+    {
+        $check = KategoryModel::find($id);
+        if (!$check) { // untuk mengecek apakah data kategory dengan id yang dimaksud ada atau tidak
+            return redirect('/kategory')->with('error', 'Data kategory tidak ditemukan');
         }
 
         try {
-            $kategory->delete();
-            return redirect('/kategory')->with('success', 'Data kategori berhasil dihapus');
+            KategoryModel::destroy($id); // Hapus data kategory
+            return redirect('/kategory')->with('success', 'Data kategory berhasil dihapus');
         } catch (\Illuminate\Database\QueryException $e) {
-            return redirect('/kategory')->with('error', 'Data kategori gagal dihapus karena masih terdapat data terkait');
+            // Jika terjadi error ketika menghapus data, redirect kembali ke halaman dengan membawa pesan error
+            return redirect('/kategory')->with('error', 'Data kategory gagal dihapus karena masih terdapat tabel lain yang terkait dengan data ini');
         }
     }
 }

@@ -47,7 +47,7 @@ class LevelController extends Controller
                 $btn .= '<button onclick="modalAction(\'' . url('/level/' . $level->level_id . '/delete_ajax') . '\')" class="btn btn-danger btn-sm">Delete</button>';
                 return $btn;
             })
-            ->rawColumns(['aksi']) // supaya kolom aksi dianggap HTML
+            ->rawColumns(['aksi'])
             ->make(true);
     }
 
@@ -116,9 +116,14 @@ class LevelController extends Controller
 
     public function show_detail_ajax($id)
     {
-        $level = LevelModel::with('level')->find($id);
+        $level = LevelModel::find($id);
 
-        return view('level.show_ajax', compact('level'));
+        if (!$level) {
+            // Tetap kembalikan view untuk konsistensi modal meskipun data tidak ditemukan
+            return response()->view('level.show_ajax', ['level' => null]);
+        }
+
+        return response()->view('level.show_ajax', compact('level'));
     }
 
     public function edit($level_id)

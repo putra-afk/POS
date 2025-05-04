@@ -55,7 +55,7 @@
                                 <form action="{{ route('level.destroy', $level->level_id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <a href="{{ route('level.detail', $level->level_id) }}"
+                                    <a href="{{ route('level.show_ajax', $level->level_id) }}"
                                         class="btn btn-sm btn-info">Detail</a>
                                     <a href="{{ route('level.edit_ajax', $level->level_id) }}"
                                         class="btn btn-sm btn-warning">Edit</a>
