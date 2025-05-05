@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\BarangModel;
 use App\Models\KategoryModel;
 
@@ -59,7 +58,6 @@ class BarangController extends Controller
         $data['page'] = (object)[
             'title' => 'Detail Barang'
         ];
-        $data['activeMenu'] = 'barang';
 
         return view('barang.show', $data);
     }
@@ -76,7 +74,6 @@ class BarangController extends Controller
         $data['page'] = (object)[
             'title' => 'Edit Barang'
         ];
-        $data['activeMenu'] = 'barang';
 
         return view('barang.edit', $data);
     }
@@ -97,7 +94,6 @@ class BarangController extends Controller
     public function destroy($id)
     {
         $barang = BarangModel::find($id);
-
         if ($barang) {
             $barang->delete();
             return redirect()->route('barang.index')->with('success', 'Data berhasil dihapus.');

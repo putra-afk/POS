@@ -9,14 +9,12 @@
             </div>
         </div>
         <div class="card-body">
-            {{-- Alerts --}}
             @if (session('success'))
                 <div class="alert alert-success">{{ session('success') }}</div>
             @elseif(session('error'))
                 <div class="alert alert-danger">{{ session('error') }}</div>
             @endif
 
-            {{-- Table --}}
             <table class="table table-bordered table-striped table-hover table-sm" id="table_barang">
                 <thead>
                     <tr>
