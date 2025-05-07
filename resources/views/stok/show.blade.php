@@ -16,10 +16,6 @@
                     <td>{{ $stok->stok_jumlah }}</td>
                 </tr>
                 <tr>
-                    <th>Keterangan</th>
-                    <td>{{ $stok->keterangan ?? '-' }}</td>
-                </tr>
-                <tr>
                     <th>Created At</th>
                     <td>{{ $stok->created_at ?? '-' }}</td>
                 </tr>

@@ -4,9 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>User Register</title>
+    <title>User Registration</title>
 
-    <!-- Styles -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=swap">
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/fontawesome-free/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
@@ -20,45 +19,40 @@
     <div class="login-box">
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
-                <a href="/" class="h1"><b>User</b>Register</a>
+                <a href="/" class="h1"><b>Admin</b>LTE</a>
             </div>
             <div class="card-body">
-                <p class="login-box-msg">Create a new account</p>
+                <p class="login-box-msg">Register a new account</p>
 
                 <form action="{{ route('auth.register') }}" method="POST" id="form-register">
                     @csrf
+
                     <div class="input-group mb-3">
-                        <input type="text" id="username" name="username" class="form-control"
+                        <input type="text" name="username" id="username" class="form-control"
                             placeholder="Username">
                         <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-user"></span>
-                            </div>
+                            <div class="input-group-text"><span class="fas fa-user"></span></div>
                         </div>
                     </div>
                     <small id="error-username" class="error-text text-danger"></small>
 
                     <div class="input-group mb-3">
-                        <input type="password" id="password" name="password" class="form-control"
+                        <input type="password" name="password" id="password" class="form-control"
                             placeholder="Password">
                         <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-lock"></span>
-                            </div>
+                            <div class="input-group-text"><span class="fas fa-lock"></span></div>
                         </div>
                     </div>
                     <small id="error-password" class="error-text text-danger"></small>
 
                     <div class="input-group mb-3">
-                        <input type="password" id="confirm_password" name="confirm_password" class="form-control"
-                            placeholder="Confirm Password">
+                        <input type="password" name="password_confirmation" id="password_confirmation"
+                            class="form-control" placeholder="Confirm Password">
                         <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-lock"></span>
-                            </div>
+                            <div class="input-group-text"><span class="fas fa-lock"></span></div>
                         </div>
                     </div>
-                    <small id="error-confirm_password" class="error-text text-danger"></small>
+                    <small id="error-password_confirmation" class="error-text text-danger"></small>
 
                     <div class="row">
                         <div class="col-8">
@@ -98,10 +92,10 @@
                     },
                     password: {
                         required: true,
-                        minlength: 6,
-                        maxlength: 20
+                        minlength: 6
                     },
-                    confirm_password: {
+                    password_confirmation: {
+                        required: true,
                         equalTo: "#password"
                     }
                 },
@@ -114,8 +108,8 @@
                             if (response.status) {
                                 Swal.fire({
                                     icon: 'success',
-                                    title: 'Success',
-                                    text: response.message,
+                                    title: 'Registered',
+                                    text: response.message
                                 }).then(function() {
                                     window.location = response.redirect;
                                 });
@@ -128,7 +122,7 @@
                                 }
                                 Swal.fire({
                                     icon: 'error',
-                                    title: 'Error',
+                                    title: 'Registration Failed',
                                     text: response.message
                                 });
                             }

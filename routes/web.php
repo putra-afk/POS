@@ -111,6 +111,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::prefix('stok')->group(function () {
             Route::get('/', [StokController::class, 'index'])->name('stok.index');
+            Route::post('/list', [StokController::class, 'list'])->name('stok.list');
             Route::get('/create', [StokController::class, 'create'])->name('stok.create');
             Route::get('/ajax', [StokController::class, 'create_ajax'])->name('stok.create_ajax');
             Route::post('/ajax', [StokController::class, 'store_ajax'])->name('stok.store_ajax');
@@ -118,6 +119,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{id}', [StokController::class, 'show'])->name('stok.show');
             Route::get('/{id}/show_ajax', [StokController::class, 'show_detail_ajax'])->name('stok.show_ajax');
             Route::get('/{id}/edit', [StokController::class, 'edit'])->name('stok.edit');
+            Route::get('/{id}/edit_ajax', [StokController::class, 'edit_ajax'])->name('stok.edit_ajax');
+            Route::put('/{id}/update_ajax', [StokController::class, 'update_ajax'])->name('stok.update_ajax');
             Route::put('/{id}/edit', [StokController::class, 'update'])->name('stok.update');
             Route::get('/{id}/delete_ajax', [StokController::class, 'confirm_delete_ajax'])->name('stok.confirm_ajax');
             Route::delete('/{id}/delete_ajax', [StokController::class, 'delete_ajax'])->name('stok.delete_ajax');
