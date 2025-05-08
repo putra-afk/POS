@@ -5,15 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
 use Illuminate\Support\Facades\Validator;
+use App\Models\UserModel;
+use App\Models\LevelModel;
 
 class AuthController extends Controller
 {
     public function login()
     {
         if (Auth::check()) {
-            return redirect('/'); // or redirect()->route('dashboard')
+            return redirect('/'); // or route('dashboard')
         }
 
         return view('auth.login');
@@ -43,38 +44,31 @@ class AuthController extends Controller
 
     public function showRegisterForm()
     {
-        return view('auth.register');
+        $levels = LevelModel::all();
+        return view('auth.register', compact('levels'));
     }
 
-    public function register(Request $request)
+    public function postRegister(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'username' => 'required|string|min:4|max:20|unique:users,username',
-            'password' => 'required|string|min:6|max:20|confirmed',
-        ], [
-            'username.unique' => 'Username sudah digunakan.',
-            'password.confirmed' => 'Konfirmasi password tidak cocok.'
+        $request->validate([
+            'level_id' => 'required|exists:m_level,level_id',
+            'username' => 'required|unique:m_user,username|min:4|max:20',
+            'nama' => 'required|min:3',
+            'password' => 'required|min:6|max:20|confirmed',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Periksa input Anda.',
-                'msgField' => $validator->errors()
-            ]);
-        }
+        $user = new UserModel();
+        $user->level_id = $request->level_id;
+        $user->username = $request->username;
+        $user->nama = $request->nama;
+        $user->password = bcrypt($request->password);
+        $user->save();
 
-        $user = User::create([
-            'username' => $request->username,
-            'password' => Hash::make($request->password),
-        ]);
-
-        Auth::login($user);
-
+        // Respond with success message
         return response()->json([
             'status' => true,
-            'message' => 'Registrasi berhasil!',
-            'redirect' => route('welcome')
+            'message' => 'Registration successful!',
+            'redirect' => route('auth.login')
         ]);
     }
 
