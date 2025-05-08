@@ -22,20 +22,20 @@ class AuthController extends Controller
 
     public function postlogin(Request $request)
     {
-        if ($request->ajax() || $request->wantsJson()) {
-            $credentials = $request->only('username', 'password');
+            if ($request->ajax() || $request->wantsJson()) {
+                $credentials = $request->only('username', 'password');
 
-            if (Auth::attempt($credentials)) {
+                if (Auth::attempt($credentials)) {
+                    return response()->json([
+                        'status' => true,
+                        'message' => 'Login Successful',
+                        'redirect' => route('welcome')
+                    ]);
+                }
+
                 return response()->json([
-                    'status' => true,
-                    'message' => 'Login Successful',
-                    'redirect' => route('welcome')
-                ]);
-            }
-
-            return response()->json([
-                'status' => false,
-                'message' => 'Username atau password salah.'
+                    'status' => false,
+                    'message' => 'Username atau password salah.'
             ]);
         }
 
