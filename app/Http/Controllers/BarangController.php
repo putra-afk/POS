@@ -56,43 +56,10 @@ class BarangController extends Controller
             ->make(true);
     }
 
-    public function create()
-    {
-        $breadcrumb = (object) [
-            "title" => "Tambah Barang",
-            "list" => ['Home', 'Barang', 'Tambah']
-        ];
-
-        $page = (object) [
-            "title" => "Tambah barang baru"
-        ];
-
-        $activeMenu = 'barang';
-
-        $kategory = KategoryModel::all();
-
-        return view('barang.create', compact('breadcrumb', 'page', 'kategory', 'activeMenu'));
-    }
-
     public function create_ajax()
     {
         $kategory = KategoryModel::all();
         return view('barang.create_ajax', compact('kategory'));
-    }
-
-    public function store(Request $request)
-    {
-        $request->validate([
-            'barang_kode' => 'required|unique:m_barang,barang_kode|max:10',
-            'barang_nama' => 'required|max:100',
-            'kategory_id' => 'required|exists:m_kategory,kategory_id',
-            'harga_beli' => 'required|numeric|min:0',
-            'harga_jual' => 'required|numeric|min:0',
-        ]);
-
-        BarangModel::create($request->all());
-
-        return redirect()->route('barang.index')->with('success', 'Barang berhasil ditambahkan!');
     }
 
     public function store_ajax(Request $request)
@@ -131,27 +98,6 @@ class BarangController extends Controller
         return redirect()->route('barang.index');
     }
 
-    public function show($id)
-    {
-        $barang = BarangModel::with('kategory')->find($id);
-        if (!$barang) {
-            return redirect()->route('barang.index')->with('error', 'Barang tidak ditemukan.');
-        }
-
-        $breadcrumb = (object) [
-            'title' => 'Detail Barang',
-            'list' => ['Home', 'Barang', 'Detail']
-        ];
-
-        $page = (object) [
-            'title' => 'Detail Barang'
-        ];
-
-        $activeMenu = 'barang';
-
-        return view('barang.show', compact('breadcrumb', 'page', 'barang', 'activeMenu'));
-    }
-
     public function show_detail_ajax($id)
     {
         $barang = BarangModel::with('kategory')->find($id);
@@ -187,18 +133,6 @@ class BarangController extends Controller
         $kategory = KategoryModel::select('kategory_id', 'kategory_name')->get();
 
         return view('barang.edit_ajax', compact('barang', 'kategory'));
-    }
-
-    public function update(Request $request, $id)
-    {
-        $barang = BarangModel::find($id);
-        if (!$barang) {
-            return redirect()->route('barang.index')->with('error', 'Barang tidak ditemukan.');
-        }
-
-        $barang->update($request->all());
-
-        return redirect()->route('barang.index')->with('success', 'Barang berhasil diperbarui.');
     }
 
     public function update_ajax(Request $request, $id)
@@ -253,11 +187,5 @@ class BarangController extends Controller
             'status' => false,
             'message' => 'Barang tidak ditemukan.'
         ]);
-    }
-
-    public function confirm_delete_ajax($id)
-    {
-        $barang = BarangModel::find($id);
-        return view('barang.confirm_ajax', compact('barang'));
     }
 }
