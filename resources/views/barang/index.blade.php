@@ -7,9 +7,14 @@
             <div class="card-tools">
                 <button onclick="modalAction('{{ route('barang.import') }}')" class="btn btn-sm btn-info mt-1">Import
                     Data</button>
-                <a class="btn btn-sm btn-primary mt-1" href="{{ route('barang.create') }}">Tambah</a>
+                <a href="{{ route('barang.export_excel') }}" class="btn btn-sm btn-primary mt-1">
+                    <i class="fa fa-file-excel"></i> Export Barang
+                </a>
                 <button onclick="modalAction('{{ route('barang.create_ajax') }}')" class="btn btn-sm btn-success mt-1">Add
                     Ajax</button>
+                <a href="{{ route('barang.export_pdf') }}" class="btn btn-sm btn-warning mt-1">
+                    <i class="fa fa-file-pdf"></i> Export PDF
+                </a>
             </div>
         </div>
 
